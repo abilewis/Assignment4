@@ -1,6 +1,6 @@
 var small = generateData(10000);
-console.log(small);
-
+var medium = generateData(500000);
+var large = generateData(1000000);
 
 function generateData(size) {
     var array = [];
