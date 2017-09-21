@@ -1,6 +1,24 @@
-var small = generateData(10000);
-var medium = generateData(500000);
-var large = generateData(1000000);
+var express = require('express');
+var path = require('path');
+var bodyParser = require('body-parser');
+var app = express();
+app.use(bodyParser());
+var publicPath = path.resolve(__dirname, '');
+app.use(express.static(publicPath));
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+server.listen(8080);
+
+io.on('connection', function (socket) {
+    var small = generateData(10000);
+    var smallJSON = JSON.stringify(small);
+    var date = new Date();
+    var time = date.getTime();
+    var obj = {};
+    obj.data = smallJSON;
+    obj.time = time;
+    io.emit("message",obj);
+});
 
 function generateData(size) {
     var array = [];
@@ -33,3 +51,24 @@ function randomString(number) {
 function randomNumber() {
     return Math.floor(1000000000 + Math.random() * 9000000000);
 }
+
+app.get('/', function(req, res){       
+    res.sendFile('index.html',{root: publicPath});
+});
+
+/*app.get('/', function(req,res) {
+    var small = generateData(10000);
+    //var medium = generateData(500000);
+    //var large = generateData(1000000);
+    
+    var smallJSONTime = new Date();
+    var smallJSON = JSON.stringify(small);
+
+    res.send(smallMessagePack);
+
+    //var mediumJSONTime = new Date();
+    //var mediumJSON = JSON.stringify(medium);
+
+    //var largeJSONTime = new Date();
+    //var largeJSON = JSON.stringify(large);
+});*/

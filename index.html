@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>Results</title>
+        <!-- Link to jQuery -->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>        
+
+        <!-- Link to socket.io -->
+        <script src ="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+
+        <script>
+            var iosocket;
+            // Connect to socket.io
+            iosocket = io.connect();
+
+            // Executed when message is recieved
+            iosocket.on('message', function(message) {
+                var startTime = message.time;
+                var endDate= new Date();
+                var endTime = endDate.getTime();
+                var difference = (endTime-startTime);
+                // Update value of each option
+                $('#mess').text(difference);
+            });
+        </script>
+    </head>
+    <body>
+        <p id="mess"></p>
+    </body>
+</html>
