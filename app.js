@@ -7,18 +7,33 @@ var publicPath = path.resolve(__dirname, '');
 app.use(express.static(publicPath));
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+var protobuf = require("protobufjs");
 server.listen(8080);
+
 
 io.on('connection', function (socket) {
     var small = generateData(10000);
-    var smallJSON = JSON.stringify(small);
+    var medium = generateData(500000);
+    //var large = generateData(1000000);
+    //send(small,"json");
+    send(medium,"json");
+});
+
+function send(data,type) {
+    var encoded;
+    if (type === "json") {
+        encoded = JSON.stringify(data);
+    }
+    else if (type == "protobuff") {
+        encoded = 
+    }
     var date = new Date();
     var time = date.getTime();
     var obj = {};
-    obj.data = smallJSON;
+    obj.data = encoded;
     obj.time = time;
     io.emit("message",obj);
-});
+}
 
 function generateData(size) {
     var array = [];
